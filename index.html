@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>佳齡健康｜新年求籤</title>
+
+  <!-- 分享預覽 -->
+  <meta property="og:title" content="佳齡健康｜新年求籤" />
+  <meta property="og:description" content="專業健康 × 馬年活力。抽一支新年健康好兆頭。" />
+  <meta property="og:image" content="https://YOUR_DOMAIN/og.png" />
+  <meta property="og:url" content="https://YOUR_DOMAIN/" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <style>
+    :root{
+      --red:#9f1d22;
+      --red-dark:#7c1418;
+      --gold:#d4af37;
+      --gold-soft:#f3e7b3;
+      --card:#fffdf6;
+      --text:#2a1c10;
+      --muted:#6b5a3c;
+    }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(800px 400px at 20% 10%, rgba(212,175,55,.25), transparent 60%),
+        radial-gradient(900px 500px at 80% 20%, rgba(212,175,55,.18), transparent 55%),
+        linear-gradient(180deg, var(--red), var(--red-dark));
+      color:var(--text);
+      font-family: "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+    }
+
+    .wrap{
+      max-width:560px;
+      margin:0 auto;
+      padding:26px 16px 44px;
+    }
+
+    .header{
+      text-align:center;
+      color:var(--gold-soft);
+      margin-bottom:16px;
+    }
+
+    .brand{
+      font-size:13px;
+      letter-spacing:2px;
+      opacity:.9;
+    }
+
+    h1{
+      font-size:30px;
+      margin:10px 0 6px;
+      color:#fff;
+      letter-spacing:2px;
+    }
+
+    .sub{
+      font-size:14px;
+      color:rgba(255,255,255,.85);
+    }
+
+    .horse{
+      font-size:42px;
+      margin-top:10px;
+      color:var(--gold);
+    }
+
+    .panel{
+      margin-top:20px;
+      background: linear-gradient(180deg,#fffdf7,#fff8e8);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:
+        0 20px 40px rgba(0,0,0,.25),
+        inset 0 0 0 2px rgba(212,175,55,.35);
+    }
+
+    button{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      font-size:17px;
+      border-radius:16px;
+      padding:14px 16px;
+    }
+
+    button.primary{
+      width:100%;
+      background: linear-gradient(180deg,var(--gold),#c59b2b);
+      color:#4a3200;
+      font-weight:700;
+      letter-spacing:1px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.25);
+    }
+
+    button.secondary{
+      background:#fff;
+      border:1px solid var(--gold);
+      color:#6a4b00;
+    }
+
+    button:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    .hint{
+      margin-top:10px;
+      font-size:13px;
+      text-align:center;
+      color:var(--muted);
+    }
+
+    .card{
+      display:none;
+      margin-top:16px;
+      padding:18px;
+      border-radius:18px;
+      background:var(--card);
+      box-shadow: inset 0 0 0 1px rgba(212,175,55,.35);
+      text-align:center;
+    }
+
+    .title{
+      font-size:24px;
+      font-weight:800;
+      color:#7a4f00;
+      letter-spacing:2px;
+    }
+
+    .msg{
+      margin-top:12px;
+      font-size:16px;
+      line-height:1.7;
+    }
+
+    .fine{
+      margin-top:16px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .footer{
+      margin-top:20px;
+      font-size:12px;
+      text-align:center;
+      color:rgba(255,255,255,.7);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="brand">佳齡健康</div>
+      <h1>新年求籤</h1>
+      <div class="sub">專業健康 × 馬年活力</div>
+      <div class="horse">🐎</div>
+    </div>
+
+    <div class="panel">
+      <button id="drawBtn" class="primary">開始求籤</button>
+
+      <div class="row">
+        <button id="againBtn" class="secondary" style="display:none;">再抽一次</button>
+      </div>
+
+      <div class="hint" id="statusHint"></div>
+
+      <div id="card" class="card">
+        <div class="title" id="title"></div>
+        <div class="msg" id="msg"></div>
+
+        <div class="row">
+          <button id="copyBtn" class="secondary">複製分享文案</button>
+        </div>
+
+        <div class="fine">籤文為新年祝福內容，祝你馬年精神滿滿、步步向前。</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      截圖分享籤文，傳遞新年好兆頭 🧧
+    </div>
+  </div>
+
+<script>
+const SITE_URL = "https://YOUR_DOMAIN/";
+const COOLDOWN_MS = 3000;
+
+const fortunes = [
+  { title:"健康籤", message:"新的一年，身體是你最好的本錢。顧好作息、動得剛好，健康自然跟上。" },
+  { title:"平安籤", message:"平安不是沒有挑戰，而是每一步都走得安心踏實。" },
+  { title:"順利籤", message:"方向對了，腳步自然輕快。願今年的每一段路，都順順前行。" },
+  { title:"順心籤", message:"把重要的事放在心上，其他的，就交給時間慢慢整理。" },
+  { title:"幸福籤", message:"幸福藏在日常的小細節裡，好好生活，本身就是一種祝福。" },
+  { title:"好運籤", message:"準備好了，好運才會靠近。願今年的努力，都有好消息回應。" }
+];
+
+function pickRandom(){
+  return fortunes[Math.floor(Math.random()*fortunes.length)];
+}
+
+const drawBtn = document.getElementById("drawBtn");
+const againBtn = document.getElementById("againBtn");
+const statusHint = document.getElementById("statusHint");
+const card = document.getElementById("card");
+const titleEl = document.getElementById("title");
+const msgEl = document.getElementById("msg");
+const copyBtn = document.getElementById("copyBtn");
+
+let lastResult=null;
+let cooldownUntil=0;
+
+function setButtons(){
+  const now=Date.now();
+  if(now<cooldownUntil){
+    drawBtn.disabled=true;
+    againBtn.disabled=true;
+    statusHint.textContent=`冷卻中：${Math.ceil((cooldownUntil-now)/1000)} 秒`;
+  }else{
+    drawBtn.disabled=false;
+    againBtn.disabled=false;
+    statusHint.textContent="可以再抽一次";
+  }
+}
+
+function startCooldown(){
+  cooldownUntil=Date.now()+COOLDOWN_MS;
+  setButtons();
+  const t=setInterval(()=>{
+    setButtons();
+    if(Date.now()>=cooldownUntil) clearInterval(t);
+  },200);
+}
+
+function draw(){
+  startCooldown();
+  const r=pickRandom();
+  lastResult=r;
+  titleEl.textContent=r.title;
+  msgEl.textContent=r.message;
+  card.style.display="block";
+  againBtn.style.display="inline-block";
+}
+
+drawBtn.onclick=draw;
+againBtn.onclick=draw;
+
+copyBtn.onclick=async ()=>{
+  if(!lastResult) return;
+  const text=`我在佳齡健康抽到【${lastResult.title}】🐎\n新年求個健康好兆頭，你也來試試！\n👉 ${SITE_URL}`;
+  try{
+    await navigator.clipboard.writeText(text);
+    statusHint.textContent="已複製分享文案 ✅";
+  }catch{
+    alert(text);
+  }
+};
+</script>
+</body>
+</html>
